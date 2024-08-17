@@ -1,13 +1,14 @@
 import { getConnection } from "../database/connection";
-import sql from 'mssql'; 
+import mysql from 'mysql2/promise'; 
+
 export const getProducts = async(req, res) => 
 {
     //Con estas lineas de codigo estoy mandando a llamar un store procedure 
     //El pool hace la conexion a la base de datos
     try {
     const pool = await getConnection();
-   const result = await pool.request().execute('sp_tbProdcutos_List')
-    res.json(result.recordset);
+    const result = await pool.query('CALL thebigappleshop.sp_Productos_List') //Asi es como se manda a llamar una store procedure en mysql
+    res.json(result[0]);
     }
     catch(error){
         console.error('Error al ejecutar el procedimiento almacenado:', error);
@@ -45,7 +46,7 @@ export const addProducts = async (req, res) => {
        .input('intCantidad', sql.Int, intCantidad)
        .input('intColor', sql.Int, intColor)
        .input('intTalla', sql.Int, intTalla)
-       .execute('BigAppleShop..sp_tbProductos_Save'); // Reemplaza con el nombre real del procedimiento almacenado
+       .query('CALL thebigappleshop.sp_tbProductos_Save'); // Reemplaza con el nombre real del procedimiento almacenado
 
 
         res.json({ message: 'Producto agregado exitosamente' });

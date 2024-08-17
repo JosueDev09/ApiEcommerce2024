@@ -1,19 +1,20 @@
-import sql from "mssql";
+//import sql from "mssql";
+import mysql from "mysql2/promise";
 
 const dbSettings ={
-    user: "JosueFg",
-    password: ".",
-    server:"localhost",
-    database:"BigAppleShop",
-    options:{
-        trustServerCertificate:true
-    }
+    user: "root",
+    password: "admin",
+   // server:"localhost",
+    database:"thebigappleshop",
+    // options:{
+    //     trustServerCertificate:true
+    // }
 
 };
 
 export async function getConnection(){
     try{
-        const pool = await sql.connect(dbSettings);    
+          const pool = await mysql.createPool(dbSettings);    
         return pool;
     }
 
